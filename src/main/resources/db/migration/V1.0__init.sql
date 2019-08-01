@@ -74,8 +74,6 @@ ALTER TABLE `user_info` ADD CONSTRAINT `user_info_fk0` FOREIGN KEY (`u_id`) REFE
 
 ALTER TABLE `user_info` ADD CONSTRAINT `user_info_fk1` FOREIGN KEY (`currency_id`) REFERENCES `currency`(`id`);
 
-ALTER TABLE `user_info` ADD CONSTRAINT `user_info_fk2` FOREIGN KEY (`current_period`) REFERENCES `period`(`id`);
-
 ALTER TABLE `consumption` ADD CONSTRAINT `consumption_fk0` FOREIGN KEY (`u_id`) REFERENCES `users`(`id`);
 
 ALTER TABLE `consumption` ADD CONSTRAINT `consumption_fk1` FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`);
