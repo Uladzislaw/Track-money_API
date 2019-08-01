@@ -20,7 +20,6 @@ CREATE TABLE `categories` (
 CREATE TABLE `reports` (
                            `id` INT NOT NULL AUTO_INCREMENT,
                            `income` DECIMAL NOT NULL,
-                           `daily_expenses` DECIMAL NOT NULL,
                            `total_expenses` DECIMAL NOT NULL,
                            `expense_on_category` DECIMAL NOT NULL,
                            `period_id` INT NOT NULL,
