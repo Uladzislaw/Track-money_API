@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @javax.persistence.Entity
@@ -39,7 +37,4 @@ public class User extends Entity {
 
     @OneToOne
     private UserInfo info;
-
-    @OneToMany
-    private List<Report> reports;
 }
