@@ -35,6 +35,6 @@ public class User extends Entity {
     @NotBlank
     private Role role;
 
-    @OneToOne
+    @OneToOne(mappedBy = "user")
     private UserInfo info;
 }

@@ -21,10 +21,10 @@ import javax.persistence.Table;
 public class UserInfo extends Entity {
 
     @OneToOne
-    @JoinColumn(name = "u_id")
+    @JoinColumn(name = "u_id", referencedColumnName = "id")
     @ToString.Exclude
     private User user;
     @OneToOne
-    @JoinColumn(name = "currency_id")
+    @JoinColumn(name = "currency_id", referencedColumnName = "id")
     private Currency currency;
 }
