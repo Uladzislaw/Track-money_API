@@ -1,6 +1,7 @@
 package com.serh.trackmoney.dto;
 
 import com.serh.trackmoney.dto.annotation.PasswordMatches;
+import com.serh.trackmoney.dto.annotation.ValidEmail;
 import com.serh.trackmoney.model.User;
 import lombok.Data;
 import lombok.NonNull;
@@ -10,6 +11,7 @@ import lombok.NonNull;
 public class UserDto implements Convertable<User> {
 
     @NonNull
+    @ValidEmail
     private String email;
 
     @NonNull
