@@ -1,7 +1,10 @@
 package com.serh.trackmoney.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -16,6 +19,9 @@ import java.time.LocalDate;
 @javax.persistence.Entity
 @Data
 @Table(name = "consumption")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Consumption extends Entity {
 
     @Positive

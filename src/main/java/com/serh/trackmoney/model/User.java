@@ -1,7 +1,10 @@
 package com.serh.trackmoney.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -17,6 +20,9 @@ import java.util.List;
 @javax.persistence.Entity
 @Data
 @Table(name = "users")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends Entity {
 
     @Email
