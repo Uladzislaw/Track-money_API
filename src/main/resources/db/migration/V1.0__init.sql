@@ -17,16 +17,6 @@ CREATE TABLE `categories` (
                               PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `reports` (
-                           `id` INT NOT NULL AUTO_INCREMENT,
-                           `income` DECIMAL NOT NULL,
-                           `total_expenses` DECIMAL NOT NULL,
-                           `expense_on_category` DECIMAL NOT NULL,
-                           `period_id` INT NOT NULL,
-                           `u_id` INT NOT NULL,
-                           PRIMARY KEY (`id`)
-);
-
 CREATE TABLE `period` (
                           `id` INT NOT NULL AUTO_INCREMENT,
                           `beginning` DATE NOT NULL,
@@ -65,10 +55,6 @@ CREATE TABLE `notifications` (
 );
 
 ALTER TABLE `categories` ADD CONSTRAINT `categories_fk0` FOREIGN KEY (`u_id`) REFERENCES `users`(`id`);
-
-ALTER TABLE `reports` ADD CONSTRAINT `reports_fk0` FOREIGN KEY (`period_id`) REFERENCES `period`(`id`);
-
-ALTER TABLE `reports` ADD CONSTRAINT `reports_fk1` FOREIGN KEY (`u_id`) REFERENCES `users`(`id`);
 
 ALTER TABLE `user_info` ADD CONSTRAINT `user_info_fk0` FOREIGN KEY (`u_id`) REFERENCES `users`(`id`);
 
