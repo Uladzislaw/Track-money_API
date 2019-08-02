@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -20,6 +22,7 @@ import javax.validation.constraints.NotBlank;
 public class Currency extends Entity {
 
     @NotBlank
+    @Enumerated(EnumType.STRING)
     @Column(unique = true)
-    private String name;
+    private CurrencySign name;
 }
