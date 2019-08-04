@@ -6,6 +6,7 @@ import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import static java.util.Optional.ofNullable;
 @Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
     @Override
     public Optional<User> findOneById(final Long id) {
@@ -32,15 +34,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(final User entity) throws UserAlreadyExistsException {
-        entity.setRole(Role.USER);
-        if (userRepository.existsByEmail(entity.getEmail())) {
-            throw new UserAlreadyExistsException("User with this email exists.");
+        if (!userRepository.existsByEmail(entity.getEmail())) {
+            return saveUser(entity);
         }
-        return userRepository.save(entity);
+        throw new UserAlreadyExistsException("User with this email exists.");
     }
 
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    private User saveUser(final User user) {
+        user.setRole(Role.USER);
+        user.setPassword(encoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 }
