@@ -1,5 +1,7 @@
 package com.serh.trackmoney.service.impl;
 
+import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
+import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.UserService;
@@ -29,8 +31,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(final User entity) {
-        return null;
+    public User save(final User entity) throws UserAlreadyExistsException {
+        entity.setRole(Role.USER);
+        if (userRepository.existsByEmail(entity.getEmail())) {
+            throw new UserAlreadyExistsException("User with this email exists.");
+        }
+        return userRepository.save(entity);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.serh.trackmoney.service;
 
+import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
 import com.serh.trackmoney.model.Entity;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface CrudService<T extends Entity> {
 
     T update(T entity);
 
-    T save(T entity);
+    T save(T entity) throws UserAlreadyExistsException;
 
     List<T> findAll();
 }
