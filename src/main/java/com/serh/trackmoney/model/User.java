@@ -32,7 +32,6 @@ public class User extends Entity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
     private Role role;
 
     @OneToOne(mappedBy = "user")
