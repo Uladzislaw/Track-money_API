@@ -16,16 +16,14 @@ public class SpringSecurityJavaConfiguration extends WebSecurityConfigurerAdapte
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/users/monitor/**").hasAuthority("ADMIN")
+                    .antMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                     .antMatchers("/register/**").permitAll()
+                    .antMatchers("/api/v1/users/**").permitAll()
                     .and()
                 .formLogin()
+                    .loginPage("/api/v1/users/email")
                     .usernameParameter("email")
-                    .defaultSuccessUrl("/")
                     .permitAll()
-                    .and()
-                .rememberMe()
-                    .rememberMeParameter("remember-me")
                     .and()
                 .csrf().disable();
     }
