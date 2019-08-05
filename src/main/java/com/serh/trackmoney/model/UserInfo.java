@@ -1,5 +1,6 @@
 package com.serh.trackmoney.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class UserInfo extends Entity {
     @OneToOne
     @JoinColumn(name = "u_id", referencedColumnName = "id")
     @ToString.Exclude
+    @JsonIgnore
     private User user;
     @OneToOne
     @JoinColumn(name = "currency_id", referencedColumnName = "id")
