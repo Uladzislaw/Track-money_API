@@ -1,8 +1,6 @@
 package com.serh.trackmoney.controller;
 
 import com.serh.trackmoney.dto.UserDto;
-import com.serh.trackmoney.dto.annotation.EmailValidator;
-import com.serh.trackmoney.exception.api.EmailNotValidException;
 import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
 import com.serh.trackmoney.model.User;
@@ -10,6 +8,7 @@ import com.serh.trackmoney.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.function.Supplier;
 
 @RestController
@@ -32,14 +32,18 @@ public class UserController {
     private Supplier<UserNotFoundException> userNotFoundException
             = () -> new UserNotFoundException("User with this email not found.");
 
-    @GetMapping(value = "/{email}")
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> all() {
+        return userService.findAll();
+    }
+
+    @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser(@PathVariable final String email) {
-        if (!email.matches(EmailValidator.getEMAIL_PATTERN())) {
-            throw new EmailNotValidException("Email is incorrect.");
-        }
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public User getUserById(@PathVariable final Long id) {
         return userService
-                .findOneByEmail(email)
+                .findOneById(id)
                 .orElseThrow(userNotFoundException);
     }
 
