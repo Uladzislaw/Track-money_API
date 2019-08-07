@@ -6,6 +6,8 @@ import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +22,9 @@ import static java.util.Optional.ofNullable;
 @Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder encoder;
+    @Autowired
+    @Lazy
+    private PasswordEncoder encoder;
 
     @Override
     public Optional<User> findOneById(final Long id) {
