@@ -1,6 +1,8 @@
 package com.serh.trackmoney.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.serh.trackmoney.dto.Convertable;
+import com.serh.trackmoney.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +24,8 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-public class User extends Entity {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class User extends Entity implements Convertable<User, UserDto> {
 
     @Email
     @NotBlank
@@ -38,4 +40,13 @@ public class User extends Entity {
 
     @OneToOne(mappedBy = "user")
     private UserInfo info;
+
+    @Override
+    public UserDto toDto() {
+        return UserDto.builder()
+                .email(email)
+                .role(role)
+                .currency(info.getCurrency())
+                .build();
+    }
 }

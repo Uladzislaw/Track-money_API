@@ -2,13 +2,19 @@ package com.serh.trackmoney.dto;
 
 import com.serh.trackmoney.dto.annotation.PasswordMatches;
 import com.serh.trackmoney.dto.annotation.ValidEmail;
+import com.serh.trackmoney.model.Currency;
+import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @PasswordMatches
 @Data
-public class UserDto implements Convertable<User> {
+@NoArgsConstructor
+@Builder
+public class UserDto implements Convertable<User, UserDto>, EntityDto {
 
     @NonNull
     @ValidEmail
@@ -17,6 +23,9 @@ public class UserDto implements Convertable<User> {
     @NonNull
     private String password;
     private String matchingPassword;
+
+    private Role role;
+    private Currency currency;
 
 
     @Override
