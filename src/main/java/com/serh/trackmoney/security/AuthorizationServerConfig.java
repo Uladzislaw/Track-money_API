@@ -38,6 +38,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Value("${security.jwt.resource-ids}")
     private String resourceIds;
 
+    @Value("${security.oauth2.client.access-token-validity-seconds}")
+    private int accessTokenValiditySeconds;
+
+    @Value("${security.oauth2.client.refresh-token-validity-seconds}")
+    private int refreshTokenValiditySeconds;
+
     private final TokenStore tokenStore;
     private final JwtAccessTokenConverter accessTokenConverter;
     private final AuthenticationManager authenticationManager;
@@ -51,14 +57,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode(clientSecret))
                 .authorizedGrantTypes(grantType)
                 .scopes(scopeRead, scopeWrite)
-                .resourceIds(resourceIds);
+                .resourceIds(resourceIds)
+                .accessTokenValiditySeconds(accessTokenValiditySeconds)
+                .refreshTokenValiditySeconds(refreshTokenValiditySeconds);
     }
 
     @Override
-    public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         enhancerChain.setTokenEnhancers(singletonList(accessTokenConverter));
-        endpoints.tokenStore(tokenStore)
+        endpoints
+                .tokenStore(tokenStore)
                 .accessTokenConverter(accessTokenConverter)
                 .tokenEnhancer(enhancerChain)
                 .authenticationManager(authenticationManager);

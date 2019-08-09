@@ -29,9 +29,6 @@ public class SpringSecurityJavaConfiguration extends WebSecurityConfigurerAdapte
     @Value("${security.signing-key}")
     private String signingKey;
 
-    @Value("${security.encoding-strength}")
-    private Integer encodingStrength;
-
     @Value("${security.security-realm}")
     private String securityRealm;
 
@@ -41,15 +38,8 @@ public class SpringSecurityJavaConfiguration extends WebSecurityConfigurerAdapte
     protected void configure(final HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/register/**").permitAll()
-                .antMatchers("/api/v1/users/**").authenticated()
                 .antMatchers("/actuator/**", "/api-docs/**").permitAll()
                 .and()
-//                .formLogin()
-//                .loginPage("/api/v1/users/login")
-//                .usernameParameter("email")
-//                .permitAll()
-//                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
