@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.http.ResponseEntity.created;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -37,9 +37,10 @@ public class UserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<UserDto> all(@RequestParam(value = "page") int page,
-                          @RequestParam(value = "size") int size,
-                          @RequestParam(value = "sort") String sort) {
-        return userService.findAll().stream()
+                             @RequestParam(value = "size") int size,
+                             @RequestParam(value = "sort") String sort) {
+        return userService.findAll(page, size, sort)
+                .stream()
                 .map(User::toDto)
                 .collect(toList());
     }
@@ -54,11 +55,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity registerUser(@RequestBody @Valid final UserDto userDto)
+    public ResponseEntity registerUser(@RequestBody final UserDto userDto)
             throws UserAlreadyExistsException {
-        User newUser = userService.save(userDto.toEntity());
-        return ResponseEntity
-                .created(URI.create("/api/v1/users/" + newUser.getId()))
+        User newUser = userService.save(userDto);
+        return created(URI.create("/api/v1/users/" + newUser.getId()))
                 .build();
     }
 }

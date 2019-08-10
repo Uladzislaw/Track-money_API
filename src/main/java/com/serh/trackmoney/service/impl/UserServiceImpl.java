@@ -1,10 +1,12 @@
 package com.serh.trackmoney.service.impl;
 
+import com.serh.trackmoney.dto.UserDto;
 import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
 import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.UserService;
+import com.serh.trackmoney.util.processor.RegistrationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -25,6 +27,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     @Lazy
     private PasswordEncoder encoder;
+    @Autowired
+    private RegistrationProcessor registrationProcessor;
 
     @Override
     public Optional<User> findOneById(final Long id) {
@@ -54,6 +58,18 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
+
+    @Override
+    public User save(final UserDto userDto) throws UserAlreadyExistsException {
+        registrationProcessor.validateOrElseThrow(userDto);
+        return save(userDto.toEntity());
+    }
+
+    @Override
+    public List<User> findAll(final int page, final int size, final String sort) {
+        return null;
+    }
+
 
     @Override
     public Optional<User> findOneByEmail(final String email) {

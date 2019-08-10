@@ -2,6 +2,7 @@ package com.serh.trackmoney.exception.handler;
 
 import com.serh.trackmoney.exception.ApiErrorResponse;
 import com.serh.trackmoney.exception.api.EmailNotValidException;
+import com.serh.trackmoney.exception.api.PasswordsDontMatchException;
 import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -41,6 +42,13 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EmailNotValidException.class)
     public ResponseEntity<ApiErrorResponse> emailInvalid(final Exception ex) {
+        final ApiErrorResponse errorResponse
+                = createApiException(HttpStatus.BAD_REQUEST, ex);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PasswordsDontMatchException.class)
+    public ResponseEntity<ApiErrorResponse> passwordsDontMatch(final Exception ex) {
         final ApiErrorResponse errorResponse
                 = createApiException(HttpStatus.BAD_REQUEST, ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
