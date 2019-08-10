@@ -46,7 +46,9 @@ public class User extends Entity implements Convertable<User, UserDto> {
         return UserDto.builder()
                 .email(email)
                 .role(role)
-                .currency(info.getCurrency())
+                .currency(Currency.builder()
+                        .name(info.getCurrency().getName())
+                        .build())
                 .build();
     }
 }
