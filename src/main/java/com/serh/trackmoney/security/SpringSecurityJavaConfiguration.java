@@ -37,9 +37,6 @@ public class SpringSecurityJavaConfiguration extends WebSecurityConfigurerAdapte
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/actuator/**", "/api-docs/**").permitAll()
-                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
