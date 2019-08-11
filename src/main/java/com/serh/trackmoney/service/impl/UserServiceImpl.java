@@ -7,7 +7,7 @@ import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.UserService;
-import com.serh.trackmoney.util.processor.NullableFieldInterceptor;
+import com.serh.trackmoney.util.NullableFieldInterceptor;
 import com.serh.trackmoney.util.processor.RegistrationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
