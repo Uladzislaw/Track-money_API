@@ -1,6 +1,5 @@
 package com.serh.trackmoney.dto;
 
-import com.serh.trackmoney.model.Currency;
 import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
 import lombok.AllArgsConstructor;

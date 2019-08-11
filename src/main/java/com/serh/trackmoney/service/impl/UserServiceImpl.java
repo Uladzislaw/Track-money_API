@@ -2,6 +2,7 @@ package com.serh.trackmoney.service.impl;
 
 import com.serh.trackmoney.dto.UserDto;
 import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
+import com.serh.trackmoney.exception.api.UserNotFoundException;
 import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.UserRepository;
@@ -24,11 +25,10 @@ import static java.util.Optional.ofNullable;
 @Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final RegistrationProcessor registrationProcessor;
     @Autowired
     @Lazy
     private PasswordEncoder encoder;
-    @Autowired
-    private RegistrationProcessor registrationProcessor;
 
     @Override
     public Optional<User> findOneById(final Long id) {
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(final User entity) {
-        return null;
+        return userRepository.save(entity);
     }
 
     @Override
@@ -74,5 +74,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findOneByEmail(final String email) {
         return userRepository.findOneByEmail(email);
+    }
+
+    @Override
+    public User update(final Long id, final UserDto userDto) {
+        User user = userRepository
+                .findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        user.setEmail(userDto.getEmail());
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setRole(userDto.getRole());
+        return update(user);
     }
 }

@@ -14,4 +14,6 @@ public interface UserService extends CrudService<User> {
     User save(UserDto userDto) throws UserAlreadyExistsException;
 
     Optional<User> findOneByEmail(String email);
+
+    User update(Long id, UserDto userDto);
 }
