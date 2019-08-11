@@ -1,4 +1,4 @@
-package com.serh.trackmoney.util.processor;
+package com.serh.trackmoney.util;
 
 import com.serh.trackmoney.dto.UserDto;
 import com.serh.trackmoney.exception.api.NullableFieldException;
