@@ -1,5 +1,6 @@
 package com.serh.trackmoney.dto;
 
+import com.serh.trackmoney.model.AccountState;
 import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class UserDto implements Convertable<User, UserDto>, EntityDto {
     private String matchingPassword;
 
     private Role role;
+    private AccountState state;
 
 
     @Override

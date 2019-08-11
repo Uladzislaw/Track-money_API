@@ -3,11 +3,11 @@ package com.serh.trackmoney.service.impl;
 import com.serh.trackmoney.dto.UserDto;
 import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
+import com.serh.trackmoney.model.AccountState;
 import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.UserService;
-import com.serh.trackmoney.util.NullableFieldInterceptor;
 import com.serh.trackmoney.util.processor.RegistrationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
 import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
 
     private User saveUser(final User user) {
         user.setRole(Role.USER);
+        user.setState(AccountState.ACTIVE);
         user.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -86,8 +88,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository
                 .findById(id)
                 .orElseThrow(UserNotFoundException::new);
-        NullableFieldInterceptor.interceptNullFieldAndThrow(userDto);
+        interceptNullFieldAndThrow(userDto);
         user.setEmail(userDto.getEmail());
+        user.setState(user.getState());
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRole(userDto.getRole());
         return update(user);
