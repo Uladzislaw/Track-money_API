@@ -7,6 +7,7 @@ import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.UserService;
+import com.serh.trackmoney.util.processor.NullableFieldInterceptor;
 import com.serh.trackmoney.util.processor.RegistrationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository
                 .findById(id)
                 .orElseThrow(UserNotFoundException::new);
+        NullableFieldInterceptor.interceptNullFieldAndThrow(userDto);
         user.setEmail(userDto.getEmail());
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRole(userDto.getRole());
