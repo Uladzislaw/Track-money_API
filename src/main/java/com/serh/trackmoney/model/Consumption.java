@@ -36,6 +36,10 @@ public class Consumption extends Entity {
     private Category category;
 
     @ManyToOne
+    @JoinColumn(name = "currency_id")
+    private Currency currency;
+
+    @ManyToOne
     @JoinColumn(name = "u_id")
     private User user;
 }

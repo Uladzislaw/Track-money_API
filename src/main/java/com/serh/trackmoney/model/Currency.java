@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @javax.persistence.Entity
@@ -25,4 +27,7 @@ public class Currency extends Entity {
     @Enumerated(EnumType.STRING)
     @Column(unique = true)
     private CurrencySign name;
+
+    @OneToMany
+    private List<Consumption> consumptions;
 }

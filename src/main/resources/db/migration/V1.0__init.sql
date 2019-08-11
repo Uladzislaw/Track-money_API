@@ -30,17 +30,11 @@ CREATE TABLE `currency` (
                             PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `user_info` (
-                             `id` INT NOT NULL AUTO_INCREMENT,
-                             `u_id` INT NOT NULL,
-                             `currency_id` INT NOT NULL,
-                             PRIMARY KEY (`id`)
-);
-
 CREATE TABLE `consumption` (
                                `id` INT NOT NULL AUTO_INCREMENT,
                                `amount` DECIMAL NOT NULL,
                                `addition_date` DATE NOT NULL,
+                               `currency_id` INT NOT NULL,
                                `u_id` INT NOT NULL,
                                `category_id` INT NOT NULL,
                                PRIMARY KEY (`id`)
@@ -56,12 +50,10 @@ CREATE TABLE `notifications` (
 
 ALTER TABLE `categories` ADD CONSTRAINT `categories_fk0` FOREIGN KEY (`u_id`) REFERENCES `users`(`id`);
 
-ALTER TABLE `user_info` ADD CONSTRAINT `user_info_fk0` FOREIGN KEY (`u_id`) REFERENCES `users`(`id`);
-
-ALTER TABLE `user_info` ADD CONSTRAINT `user_info_fk1` FOREIGN KEY (`currency_id`) REFERENCES `currency`(`id`);
-
 ALTER TABLE `consumption` ADD CONSTRAINT `consumption_fk0` FOREIGN KEY (`u_id`) REFERENCES `users`(`id`);
 
-ALTER TABLE `consumption` ADD CONSTRAINT `consumption_fk1` FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`);
+ALTER TABLE `consumption` ADD CONSTRAINT `consumption_fk1` FOREIGN KEY (`currency_id`) REFERENCES `currency`(`id`);
+
+ALTER TABLE `consumption` ADD CONSTRAINT `consumption_fk2` FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`);
 
 ALTER TABLE `notifications` ADD CONSTRAINT `notifications_fk0` FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`);

@@ -20,7 +20,6 @@ public class UserDto implements Convertable<User, UserDto>, EntityDto {
     private String matchingPassword;
 
     private Role role;
-    private Currency currency;
 
 
     @Override
