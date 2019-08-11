@@ -37,6 +37,9 @@ public class User extends Entity implements Convertable<User, UserDto> {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    private AccountState state;
+
     @Override
     public UserDto toDto() {
         return UserDto.builder()
