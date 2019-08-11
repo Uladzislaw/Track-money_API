@@ -32,13 +32,9 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder encoder;
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<User> findOneById(final Long id) {
         return ofNullable(userRepository.getOne(id));
-    }
-
-    @Override
-    public User update(final User entity) {
-        return userRepository.save(entity);
     }
 
     @Override
@@ -50,6 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -67,14 +64,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> findAll(final int page, final int size, final String sort) {
         return null;
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<User> findOneByEmail(final String email) {
         return userRepository.findOneByEmail(email);
+    }
+
+    @Override
+    public User update(final User entity) {
+        return userRepository.save(entity);
     }
 
     @Override
