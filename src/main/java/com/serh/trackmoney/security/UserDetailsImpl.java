@@ -1,5 +1,6 @@
 package com.serh.trackmoney.security;
 
+import com.serh.trackmoney.model.AccountState;
 import com.serh.trackmoney.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,7 +60,7 @@ public class UserDetailsImpl implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return !user.getState().equals(AccountState.DELETED);
     }
 
     /**
@@ -70,7 +71,8 @@ public class UserDetailsImpl implements UserDetails {
      */
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getState().equals(AccountState.BANNED)
+                && !user.getState().equals(AccountState.INACTIVE);
     }
 
     /**
@@ -93,6 +95,6 @@ public class UserDetailsImpl implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getState().equals(AccountState.ACTIVE);
     }
 }
