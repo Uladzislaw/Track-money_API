@@ -7,7 +7,7 @@ CREATE TABLE `users`
     `password` varchar(64)  NOT NULL,
     `state`    varchar(20)  NOT NULL
         check ( `state` in ('ACTIVE', 'INACTIVE', 'DELETED', 'BANNED')),
-    `role`     varchar(50) NOT NULL,
+    `role`     varchar(50)  NOT NULL,
     PRIMARY KEY (`id`)
 );
 
@@ -15,9 +15,9 @@ CREATE TABLE `categories`
 (
     `id`      INT         NOT NULL AUTO_INCREMENT,
     `name`    varchar(50) NOT NULL UNIQUE,
-    `type`    varchar(50) NOT NULL UNIQUE,
+    `type`    varchar(50) NOT NULL check ( `type` in ('CONSUMPTION', 'INCOME')),
     `is_ugly` BOOLEAN     NOT NULL DEFAULT '0',
-    `u_id`    INT         NOT NULL DEFAULT '0',
+    `u_id`    INT,
     PRIMARY KEY (`id`)
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE `currency`
 CREATE TABLE `consumption`
 (
     `id`            INT     NOT NULL AUTO_INCREMENT,
-    `amount`        DECIMAL NOT NULL,
+    `amount`        numeric(19,4) NOT NULL,
     `addition_date` DATE    NOT NULL,
     `currency_id`   INT     NOT NULL,
     `u_id`          INT     NOT NULL,
