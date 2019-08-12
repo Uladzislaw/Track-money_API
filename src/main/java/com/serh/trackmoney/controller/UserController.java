@@ -34,12 +34,15 @@ public class UserController {
 
     private Supplier<UserNotFoundException> userNotFoundException
             = () -> new UserNotFoundException("User with this email not found.");
+    private static final String DEFAULT_PAGE_SIZE = "10";
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> all(@RequestParam(value = "page") int page,
-                             @RequestParam(value = "size") int size,
-                             @RequestParam(value = "sort") String sort) {
+    public List<UserDto> all(@RequestParam(value = "page") final int page,
+                             @RequestParam(value = "size",
+                                     defaultValue = DEFAULT_PAGE_SIZE) final int size,
+                             @RequestParam(value = "sort",
+                                     defaultValue = "id,asc") final String sort) {
         return userService.findAll(page, size, sort)
                 .stream()
                 .map(User::toDto)
@@ -65,7 +68,7 @@ public class UserController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<UserDto> updateUser(@RequestBody final UserDto userDto,
-                                           @PathVariable final Long id) {
+                                              @PathVariable final Long id) {
         return ResponseEntity.ok(userService.update(id, userDto).toDto());
     }
 }

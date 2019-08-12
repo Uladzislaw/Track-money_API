@@ -45,6 +45,7 @@ public class User extends Entity implements Convertable<User, UserDto> {
         return UserDto.builder()
                 .email(email)
                 .role(role)
+                .state(state)
                 .build();
     }
 }
