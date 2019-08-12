@@ -108,4 +108,13 @@ public class UserServiceImpl implements UserService {
         user.setRole(userDto.getRole());
         return update(user);
     }
+
+    @Override
+    public User makeInactive(final Long id) {
+        User user = userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with this id not found"));
+        user.setState(AccountState.INACTIVE);
+        return userRepository.save(user);
+    }
 }
