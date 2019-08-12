@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
+import static com.serh.trackmoney.util.PaginationQueryErrorInterceptor.interceptIncorrectDataAndThrow;
 import static java.util.Optional.ofNullable;
 import static org.springframework.data.domain.PageRequest.of;
 
@@ -72,7 +73,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public Page<User> findAll(final int page, final int size, final String sort) {
-        return userRepository.findAll(createPageRequest(page, size, sort));
+        interceptIncorrectDataAndThrow(page, size, sort);
+        return userRepository.findAll(createPageRequest(page - 1, size, sort));
     }
 
     private PageRequest createPageRequest(final int page, final int size,
