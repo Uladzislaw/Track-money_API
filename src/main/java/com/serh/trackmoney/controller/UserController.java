@@ -6,6 +6,7 @@ import com.serh.trackmoney.exception.api.UserNotFoundException;
 import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +20,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
 import java.util.function.Supplier;
 
-import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.created;
 
 @RestController
@@ -38,15 +37,12 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> all(@RequestParam(value = "page") final int page,
-                             @RequestParam(value = "size",
+    public Page<UserDto> all(@RequestParam(value = "page") final int page,
+                          @RequestParam(value = "size",
                                      defaultValue = DEFAULT_PAGE_SIZE) final int size,
-                             @RequestParam(value = "sort",
+                          @RequestParam(value = "sort",
                                      defaultValue = "id,asc") final String sort) {
-        return userService.findAll(page, size, sort)
-                .stream()
-                .map(User::toDto)
-                .collect(toList());
+        return userService.findAll(page, size, sort).map(User::toDto);
     }
 
     @GetMapping(value = "/{id}")
