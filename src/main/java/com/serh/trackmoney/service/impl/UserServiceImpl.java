@@ -12,6 +12,9 @@ import com.serh.trackmoney.util.processor.RegistrationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,7 @@ import java.util.Optional;
 
 import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
 import static java.util.Optional.ofNullable;
+import static org.springframework.data.domain.PageRequest.of;
 
 @RequiredArgsConstructor
 @Service
@@ -67,10 +71,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> findAll(final int page, final int size, final String sort) {
-        return null;
+    public Page<User> findAll(final int page, final int size, final String sort) {
+        return userRepository.findAll(createPageRequest(page, size, sort));
     }
 
+    private PageRequest createPageRequest(final int page, final int size,
+                                          final String sort) {
+        String[] sortParams = sort.split(",");
+        return sortParams.length > 1 && sortParams[1].equals("desc")
+                ? of(page, size, Sort.by(sortParams[0]).descending())
+                : of(page, size, Sort.by(sortParams[0]));
+    }
 
     @Override
     @Transactional(readOnly = true)

@@ -3,13 +3,13 @@ package com.serh.trackmoney.service;
 import com.serh.trackmoney.dto.UserDto;
 import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
 import com.serh.trackmoney.model.User;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserService extends CrudService<User> {
 
-    List<User> findAll(int page, int size, String sort);
+    Page<User> findAll(int page, int size, String sort);
 
     User save(UserDto userDto) throws UserAlreadyExistsException;
 
