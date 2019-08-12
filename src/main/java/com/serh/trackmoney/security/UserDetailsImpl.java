@@ -10,7 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+
+import static java.util.Collections.singletonList;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,7 +29,7 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String userRole = user.getRole().name();
-        return Collections.singletonList(new SimpleGrantedAuthority(userRole));
+        return singletonList(new SimpleGrantedAuthority(userRole));
     }
 
     /**
