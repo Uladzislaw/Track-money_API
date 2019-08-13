@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -61,6 +62,13 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
         final ApiErrorResponse errorResponse
                 = createApiException(HttpStatus.BAD_REQUEST, ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> entityNotFound(final Exception ex) {
+        final ApiErrorResponse errorResponse
+                = createApiException(HttpStatus.NOT_FOUND, ex);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NullableFieldException.class)
