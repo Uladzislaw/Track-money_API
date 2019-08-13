@@ -26,7 +26,6 @@ import java.util.Optional;
 import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
 import static com.serh.trackmoney.util.PaginationQueryErrorInterceptor.interceptIncorrectDataAndThrow;
 import static java.util.Objects.nonNull;
-import static java.util.Optional.ofNullable;
 import static org.springframework.data.domain.PageRequest.of;
 
 @RequiredArgsConstructor
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public Optional<User> findOneById(final Long id) {
-        return ofNullable(userRepository.getOne(id));
+        return userRepository.findById(id);
     }
 
     @Override
