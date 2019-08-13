@@ -8,6 +8,7 @@ import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.UserService;
+import com.serh.trackmoney.util.processor.EmailValidatorProcessor;
 import com.serh.trackmoney.util.processor.RegistrationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.util.Optional;
 
 import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
 import static com.serh.trackmoney.util.PaginationQueryErrorInterceptor.interceptIncorrectDataAndThrow;
+import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static org.springframework.data.domain.PageRequest.of;
 
@@ -98,14 +100,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(final Long id, final UserDto userDto) {
-        User user = userRepository
-                .findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
         interceptNullFieldAndThrow(userDto);
         user.setEmail(userDto.getEmail());
         user.setState(user.getState());
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRole(userDto.getRole());
+        return update(user);
+    }
+
+    @Override
+    public User updateByNonNullFields(final Long id, final UserDto userDto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        if (nonNull(userDto.getEmail())) {
+            new EmailValidatorProcessor().validateOrElseThrow(userDto);
+            user.setEmail(userDto.getEmail());
+        }
+        if (nonNull(userDto.getPassword())) {
+            user.setPassword(encoder.encode(userDto.getPassword()));
+        }
+        if (nonNull(userDto.getRole())) {
+            user.setRole(userDto.getRole());
+        }
+        if (nonNull(userDto.getState())) {
+            user.setState(userDto.getState());
+        }
         return update(user);
     }
 

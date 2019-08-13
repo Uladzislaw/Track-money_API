@@ -16,4 +16,6 @@ public interface UserService extends CrudService<User> {
     Optional<User> findOneByEmail(String email);
 
     User update(Long id, UserDto userDto);
+
+    User updateByNonNullFields(Long id, UserDto userDto);
 }

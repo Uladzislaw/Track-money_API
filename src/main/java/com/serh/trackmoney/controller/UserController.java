@@ -5,6 +5,7 @@ import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
 import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.service.UserService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,6 +27,7 @@ import java.net.URI;
 import java.util.function.Supplier;
 
 import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -65,9 +68,17 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDto> updateUser(@RequestBody final UserDto userDto,
+    public ResponseEntity<UserDto> updateUser(@RequestBody @NonNull
+                                                  final UserDto userDto,
                                               @PathVariable final Long id) {
-        return ResponseEntity.ok(userService.update(id, userDto).toDto());
+        return ok(userService.update(id, userDto).toDto());
+    }
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<UserDto> updateUserByCriteria(@RequestBody @NonNull
+                                                            final UserDto userDto,
+                                                        @PathVariable final Long id) {
+        return ok(userService.updateByNonNullFields(id, userDto).toDto());
     }
 
     @DeleteMapping(value = "/{id}")
