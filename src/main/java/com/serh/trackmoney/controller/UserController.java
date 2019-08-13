@@ -8,6 +8,8 @@ import com.serh.trackmoney.service.UserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,8 +26,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 import java.util.function.Supplier;
 
+import static java.lang.Integer.parseInt;
+import static java.util.Arrays.asList;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -37,26 +44,25 @@ public class UserController {
     private final UserService userService;
 
     private Supplier<UserNotFoundException> userNotFoundException
-            = () -> new UserNotFoundException("User with this email not found.");
+            = () -> new UserNotFoundException("User not found.");
     private static final String DEFAULT_PAGE_SIZE = "10";
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<UserDto> all(@RequestParam(value = "page") final int page,
-                          @RequestParam(value = "size",
+                             @RequestParam(value = "size",
                                      defaultValue = DEFAULT_PAGE_SIZE) final int size,
-                          @RequestParam(value = "sort",
+                             @RequestParam(value = "sort",
                                      defaultValue = "id,asc") final String sort) {
         return userService.findAll(page, size, sort).map(User::toDto);
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUserById(@PathVariable final Long id) {
-        return userService
-                .findOneById(id)
-                .orElseThrow(userNotFoundException)
-                .toDto();
+    public Resource<UserDto> getUserById(@PathVariable final Long id) {
+        return userService.findOneById(id)
+                .map(user -> new Resource<>(user.toDto(), createSimpleList(id)))
+                .orElseThrow(userNotFoundException);
     }
 
     @PostMapping(value = "/register")
@@ -68,15 +74,13 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDto> updateUser(@RequestBody @NonNull
-                                                  final UserDto userDto,
+    public ResponseEntity<UserDto> updateUser(@RequestBody @NonNull final UserDto userDto,
                                               @PathVariable final Long id) {
         return ok(userService.update(id, userDto).toDto());
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<UserDto> updateUserByCriteria(@RequestBody @NonNull
-                                                            final UserDto userDto,
+    public ResponseEntity<UserDto> updateUserByCriteria(@RequestBody @NonNull final UserDto userDto,
                                                         @PathVariable final Long id) {
         return ok(userService.updateByNonNullFields(id, userDto).toDto());
     }
@@ -86,5 +90,15 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable final Long id) {
         userService.makeInactive(id);
+    }
+
+    private List<Link> createSimpleList(final Long id) {
+        int pageSize = parseInt(DEFAULT_PAGE_SIZE);
+        //calculate page number where is user placed among all users
+        int userPage = id <= pageSize ? 1 : (pageSize / id.intValue()) + 1;
+        return asList(linkTo(methodOn(UserController.class).getUserById(id))
+                        .withSelfRel(),
+                linkTo(methodOn(UserController.class).all(userPage, pageSize, null))
+                        .withRel("users"));
     }
 }
