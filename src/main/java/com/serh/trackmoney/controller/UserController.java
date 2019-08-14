@@ -1,5 +1,6 @@
 package com.serh.trackmoney.controller;
 
+import com.serh.trackmoney.controller.helper.RelatedLinkCreatorHelper;
 import com.serh.trackmoney.dto.UserDto;
 import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
@@ -8,7 +9,6 @@ import com.serh.trackmoney.service.UserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +26,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
 import java.util.function.Supplier;
 
 import static java.lang.Integer.parseInt;
-import static java.util.Arrays.asList;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -42,6 +38,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class UserController {
 
     private final UserService userService;
+    private final RelatedLinkCreatorHelper linkCreator;
 
     private Supplier<UserNotFoundException> userNotFoundException
             = () -> new UserNotFoundException("User not found.");
@@ -61,7 +58,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public Resource<UserDto> getUserById(@PathVariable final Long id) {
         return userService.findOneById(id)
-                .map(user -> new Resource<>(user.toDto(), createSimpleList(id)))
+                .map(user -> new Resource<>(user.toDto(),
+                        linkCreator.createSimpleListLinkForUser(id, parseInt(DEFAULT_PAGE_SIZE))))
                 .orElseThrow(userNotFoundException);
     }
 
@@ -90,15 +88,5 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable final Long id) {
         userService.makeInactive(id);
-    }
-
-    private List<Link> createSimpleList(final Long id) {
-        int pageSize = parseInt(DEFAULT_PAGE_SIZE);
-        //calculate page number where is user placed among all users
-        int userPage = id <= pageSize ? 1 : (pageSize / id.intValue()) + 1;
-        return asList(linkTo(methodOn(UserController.class).getUserById(id))
-                        .withSelfRel(),
-                linkTo(methodOn(UserController.class).all(userPage, pageSize, null))
-                        .withRel("users"));
     }
 }
