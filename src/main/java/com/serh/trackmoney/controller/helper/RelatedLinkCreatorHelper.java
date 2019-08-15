@@ -1,6 +1,9 @@
 package com.serh.trackmoney.controller.helper;
 
+import com.serh.trackmoney.controller.CategoryController;
+import com.serh.trackmoney.controller.ConsumptionController;
 import com.serh.trackmoney.controller.UserController;
+import com.serh.trackmoney.model.Consumption;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 
@@ -20,5 +23,14 @@ public class RelatedLinkCreatorHelper {
                         .withSelfRel(),
                 linkTo(methodOn(UserController.class).all(userPage, pageSize, null))
                         .withRel("users"));
+    }
+
+    public List<Link> createSimpleLinkListForAllConsumptions(final Consumption consumption) {
+        return asList(linkTo(methodOn(ConsumptionController.class)
+                        .getOne(consumption.getId())).withSelfRel(),
+                linkTo(methodOn(UserController.class)
+                        .getUserById(consumption.getUser().getId())).withRel("user"),
+                linkTo(methodOn(CategoryController.class)
+                        .getOne(consumption.getCategory().getId())).withRel("category"));
     }
 }
