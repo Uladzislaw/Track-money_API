@@ -16,7 +16,7 @@ public class NullableFieldInterceptor {
 
     public static void interceptNullFieldAndThrow(final ConsumptionDto consumptionDto) {
         if (isNull(consumptionDto.getAmount()) || isNull(consumptionDto.getCategory())
-                || isNull(consumptionDto.getUser()) || isNull(consumptionDto.getCurrency())) {
+                || isNull(consumptionDto.getCurrency())) {
             throw new NullableFieldException("All fields must be not null");
         }
     }
