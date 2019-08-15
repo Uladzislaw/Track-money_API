@@ -3,7 +3,6 @@ package com.serh.trackmoney.dto;
 import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.model.Consumption;
 import com.serh.trackmoney.model.Currency;
-import com.serh.trackmoney.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +22,6 @@ public class ConsumptionDto
     private LocalDate additionDate;
     private Category category;
     private Currency currency;
-    private User user;
 
     @Override
     public Consumption toEntity() {
