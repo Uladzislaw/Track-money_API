@@ -12,9 +12,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @javax.persistence.Entity
@@ -39,6 +41,10 @@ public class User extends Entity implements Convertable<User, UserDto> {
 
     @Enumerated(EnumType.STRING)
     private AccountState state;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Category> categories;
+
 
     @Override
     public UserDto toDto() {

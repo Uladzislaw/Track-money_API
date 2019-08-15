@@ -1,10 +1,12 @@
 package com.serh.trackmoney.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -33,6 +35,7 @@ public class Consumption extends Entity {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @ToString.Exclude
     private Category category;
 
     @ManyToOne
@@ -41,5 +44,7 @@ public class Consumption extends Entity {
 
     @ManyToOne
     @JoinColumn(name = "u_id")
+    @JsonIgnore
+    @ToString.Exclude
     private User user;
 }
