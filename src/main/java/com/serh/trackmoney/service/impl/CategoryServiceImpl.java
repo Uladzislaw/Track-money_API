@@ -1,6 +1,7 @@
 package com.serh.trackmoney.service.impl;
 
 import com.serh.trackmoney.model.Category;
+import com.serh.trackmoney.repository.CategoryRepository;
 import com.serh.trackmoney.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,14 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
+
+    private final CategoryRepository categoryRepository;
+
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Category> findOneById(final Long id) {
-        return Optional.empty();
+        return categoryRepository.findById(id);
     }
 
     @Override
