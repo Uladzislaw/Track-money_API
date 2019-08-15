@@ -1,6 +1,7 @@
 package com.serh.trackmoney.exception.handler;
 
 import com.serh.trackmoney.exception.ApiErrorResponse;
+import com.serh.trackmoney.exception.api.ConsumptionNotFoundException;
 import com.serh.trackmoney.exception.api.EmailNotValidException;
 import com.serh.trackmoney.exception.api.NullableFieldException;
 import com.serh.trackmoney.exception.api.PageRequestException;
@@ -55,6 +56,13 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
         final ApiErrorResponse errorResponse
                 = createApiException(HttpStatus.BAD_REQUEST, ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConsumptionNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> consumptionNotFound(final Exception ex) {
+        final ApiErrorResponse errorResponse
+                = createApiException(HttpStatus.NOT_FOUND, ex);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(PageRequestException.class)
