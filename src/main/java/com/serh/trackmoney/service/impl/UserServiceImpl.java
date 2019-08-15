@@ -6,12 +6,14 @@ import com.serh.trackmoney.exception.api.UserNotFoundException;
 import com.serh.trackmoney.model.AccountState;
 import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
+import com.serh.trackmoney.repository.CategoryRepository;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.UserService;
 import com.serh.trackmoney.util.processor.EmailValidatorProcessor;
 import com.serh.trackmoney.util.processor.RegistrationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,9 +36,13 @@ import static org.springframework.data.domain.PageRequest.of;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RegistrationProcessor registrationProcessor;
+    private final CategoryRepository categoryRepository;
     @Autowired
     @Lazy
     private PasswordEncoder encoder;
+
+    @Value("${categories.standard.default}")
+    private Long defaultCategories;
 
     @Override
     @Transactional(readOnly = true)
@@ -52,16 +58,11 @@ public class UserServiceImpl implements UserService {
         throw new UserAlreadyExistsException("User with this email exists.");
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
     private User saveUser(final User user) {
         user.setRole(Role.USER);
         user.setState(AccountState.ACTIVE);
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setCategories(categoryRepository.findAllDefault(defaultCategories));
         return userRepository.save(user);
     }
 
@@ -90,6 +91,12 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public Optional<User> findOneByEmail(final String email) {
         return userRepository.findOneByEmail(email);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Override

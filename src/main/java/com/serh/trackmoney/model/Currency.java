@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -33,6 +34,7 @@ public class Currency extends Entity implements Convertable<Currency, CurrencyDt
 
     @OneToMany(mappedBy = "currency")
     @JsonIgnore
+    @ToString.Exclude
     private List<Consumption> consumptions;
 
     @Override

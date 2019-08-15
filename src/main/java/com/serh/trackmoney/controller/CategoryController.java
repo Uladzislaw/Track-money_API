@@ -1,5 +1,6 @@
 package com.serh.trackmoney.controller;
 
+import com.serh.trackmoney.controller.helper.RelatedLinkCreatorHelper;
 import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final RelatedLinkCreatorHelper linkCreator;
 
     @GetMapping(value = "/{id}")
     public Resource<Category> getOne(@PathVariable final Long id) {
         return new Resource<>(categoryService.findOneById(id).orElseThrow());
     }
-
 }
