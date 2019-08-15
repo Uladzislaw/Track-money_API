@@ -3,7 +3,9 @@ package com.serh.trackmoney.service.impl;
 import com.serh.trackmoney.dto.ConsumptionDto;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
 import com.serh.trackmoney.model.Consumption;
+import com.serh.trackmoney.repository.CategoryRepository;
 import com.serh.trackmoney.repository.ConsumptionRepository;
+import com.serh.trackmoney.repository.CurrencyRepository;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.ConsumptionService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,8 @@ public class ConsumptionServiceImpl implements ConsumptionService {
 
     private final ConsumptionRepository consumptionRepository;
     private final UserRepository userRepository;
-
+    private final CategoryRepository categoryRepository;
+    private final CurrencyRepository currencyRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -43,8 +46,10 @@ public class ConsumptionServiceImpl implements ConsumptionService {
         Consumption userConsumption = consumptionRepository
                 .findByAdditionDate(consumptionDto.getAdditionDate());
         userConsumption.setAmount(consumptionDto.getAmount());
-        userConsumption.setCategory(consumptionDto.getCategory());
-        userConsumption.setCurrency(consumptionDto.getCurrency());
+        userConsumption.setCategory(categoryRepository
+                .findByName(consumptionDto.getCategory().getName()));
+        userConsumption.setCurrency(currencyRepository
+                .findByName(consumptionDto.getCurrency().getName()));
         return update(userConsumption);
     }
 
@@ -56,10 +61,12 @@ public class ConsumptionServiceImpl implements ConsumptionService {
             userConsumption.setAmount(consumptionDto.getAmount());
         }
         if (nonNull(consumptionDto.getCurrency())) {
-            userConsumption.setCurrency(consumptionDto.getCurrency());
+            userConsumption.setCurrency(currencyRepository
+                    .findByName(consumptionDto.getCurrency().getName()));
         }
         if (nonNull(consumptionDto.getCategory())) {
-            userConsumption.setCategory(consumptionDto.getCategory());
+            userConsumption.setCategory(categoryRepository
+                    .findByName(consumptionDto.getCategory().getName()));
         }
         return update(userConsumption);
     }
