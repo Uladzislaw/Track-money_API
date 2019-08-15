@@ -1,6 +1,8 @@
 package com.serh.trackmoney.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.serh.trackmoney.dto.CategoryDto;
+import com.serh.trackmoney.dto.Convertable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +29,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category extends Entity {
+public class Category extends Entity implements Convertable<Category, CategoryDto> {
 
     @NotBlank
     @Column(unique = true)
@@ -46,6 +48,15 @@ public class Category extends Entity {
     @ToString.Exclude
     private Set<User> users;
 
-    @OneToMany
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<Consumption> consumption;
+
+    @Override
+    public CategoryDto toDto() {
+        return CategoryDto.builder()
+                .name(name)
+                .type(type)
+                .build();
+    }
 }
