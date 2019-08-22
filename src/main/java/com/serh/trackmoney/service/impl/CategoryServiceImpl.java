@@ -1,7 +1,9 @@
 package com.serh.trackmoney.service.impl;
 
+import com.serh.trackmoney.exception.api.UserNotFoundException;
 import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.repository.CategoryRepository;
+import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,20 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Category> findOneById(final Long id) {
         return categoryRepository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Category> findSpecific(final Long userId) {
+        return categoryRepository.findByIdGreaterThanAndUsersIs(9L,
+                userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
     }
 
     @Override

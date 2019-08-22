@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.function.Supplier;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -31,8 +34,21 @@ public class CategoryController {
                 .orElseThrow(categoryNotFoundException));
     }
 
+    @GetMapping(value = "/specific/{userId}")
+    public List<Resource<CategoryDto>> getSpecificCategoriesForUser(
+            @PathVariable final Long userId) {
+        return addResource(categoryService.findSpecific(userId));
+    }
+
     private Resource<CategoryDto> addResource(final Category category) {
         return new Resource<>(category.toDto(),
                 linkCreator.createSimpleLinkListForCategory(category));
+    }
+
+    private List<Resource<CategoryDto>> addResource(final List<Category> categories) {
+        return categories.stream()
+                .map(category -> new Resource<>(category.toDto(),
+                        linkCreator.createSimpleLinkListForCategory(category)))
+                .collect(toList());
     }
 }
