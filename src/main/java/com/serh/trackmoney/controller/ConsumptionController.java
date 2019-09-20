@@ -7,7 +7,6 @@ import com.serh.trackmoney.model.Consumption;
 import com.serh.trackmoney.service.CategoryService;
 import com.serh.trackmoney.service.ConsumptionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,7 @@ public class ConsumptionController {
             = () -> new CategoryNotFoundException("Category not found.");
 
     @GetMapping
-    public List<Resource<ConsumptionDto>> all() {
+    public List<ConsumptionDto> all() {
         return null;
     }
 
