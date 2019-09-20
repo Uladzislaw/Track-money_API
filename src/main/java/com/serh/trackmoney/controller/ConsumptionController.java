@@ -1,6 +1,5 @@
 package com.serh.trackmoney.controller;
 
-import com.serh.trackmoney.controller.helper.RelatedLinkCreatorHelper;
 import com.serh.trackmoney.dto.ConsumptionDto;
 import com.serh.trackmoney.exception.api.CategoryNotFoundException;
 import com.serh.trackmoney.exception.api.ConsumptionNotFoundException;
@@ -14,11 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-
-import static com.serh.trackmoney.dto.ConsumptionDto.of;
 
 @RestController
 @RequestMapping("/api/v1/consumptions")
@@ -27,7 +23,6 @@ public class ConsumptionController {
 
     private final ConsumptionService consumptionService;
     private CategoryService categoryService;
-    private final RelatedLinkCreatorHelper linkCreator;
 
     private Supplier<ConsumptionNotFoundException> consumptionNotFoundException
             = () -> new ConsumptionNotFoundException("Consumption not found.");
@@ -40,28 +35,15 @@ public class ConsumptionController {
     }
 
     @GetMapping(value = "/category/{categoryId}")
-    public List<Resource<ConsumptionDto>> getByCategory(@PathVariable final Long categoryId) {
-        return addAllResources(categoryService.findOneById(categoryId)
+    public List<Consumption> getByCategory(@PathVariable final Long categoryId) {
+        return categoryService.findOneById(categoryId)
                 .orElseThrow(categoryNotFoundException)
-                .getConsumption());
+                .getConsumption();
     }
 
     @GetMapping(value = "/{id}")
-    public Resource<ConsumptionDto> getOne(@PathVariable final Long id) {
-        return addResource(consumptionService.findOneById(id)
-                .orElseThrow(consumptionNotFoundException));
-    }
-
-    private List<Resource<ConsumptionDto>> addAllResources(final List<Consumption> consumptions) {
-        List<Resource<ConsumptionDto>> resources = new ArrayList<>();
-        for (Consumption c : consumptions) {
-            resources.add(addResource(c));
-        }
-        return resources;
-    }
-
-    private Resource<ConsumptionDto> addResource(final Consumption consumption) {
-        return new Resource<>(of(consumption),
-                linkCreator.createSimpleLinkListForConsumption(consumption));
+    public Consumption getOne(@PathVariable final Long id) {
+        return consumptionService.findOneById(id)
+                .orElseThrow(consumptionNotFoundException);
     }
 }

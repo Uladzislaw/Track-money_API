@@ -19,5 +19,7 @@ public interface UserService extends CrudService<User> {
 
     User updateByNonNullFields(Long id, UserDto userDto);
 
+    Page<User> findByCategory(String name, int page, int size, String sort);
+
     User makeInactive(Long id);
 }

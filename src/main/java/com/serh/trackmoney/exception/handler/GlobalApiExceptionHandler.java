@@ -10,6 +10,7 @@ import com.serh.trackmoney.exception.api.PasswordsDontMatchException;
 import com.serh.trackmoney.exception.api.UserAlreadyExistsException;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,6 +76,13 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PageRequestException.class)
     public ResponseEntity<ApiErrorResponse> pageRequestException(final Exception ex) {
+        final ApiErrorResponse errorResponse
+                = createApiException(HttpStatus.BAD_REQUEST, ex);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ApiErrorResponse> properyRefException(final Exception ex) {
         final ApiErrorResponse errorResponse
                 = createApiException(HttpStatus.BAD_REQUEST, ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);

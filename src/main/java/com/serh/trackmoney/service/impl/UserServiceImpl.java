@@ -79,6 +79,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(createPageRequest(page - 1, size, sort));
     }
 
+    @Override
+    public Page<User> findByCategory(final String name, int page, int size, final String sort) {
+        //TODO: check issue
+        return userRepository
+                .findUsersByCategories(categoryRepository.findByName(name),
+                        createPageRequest(page, size, sort));
+    }
+
     private PageRequest createPageRequest(final int page, final int size,
                                           final String sort) {
         String[] sortParams = sort.split(",");
@@ -135,6 +143,7 @@ public class UserServiceImpl implements UserService {
         }
         return update(user);
     }
+
 
     @Override
     public User makeInactive(final Long id) {
