@@ -81,7 +81,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> findByCategory(final String name, int page, int size, final String sort) {
-        //TODO: check issue
         return userRepository
                 .findUsersByCategories(categoryRepository.findByName(name),
                         createPageRequest(page, size, sort));
