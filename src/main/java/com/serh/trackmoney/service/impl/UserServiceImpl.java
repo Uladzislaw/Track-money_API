@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +24,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
+import static com.serh.trackmoney.util.PageRequestCreator.createPageRequest;
 import static com.serh.trackmoney.util.PaginationQueryErrorInterceptor.interceptIncorrectDataAndThrow;
 import static java.util.Objects.nonNull;
-import static org.springframework.data.domain.PageRequest.of;
 
 @RequiredArgsConstructor
 @Service
@@ -84,14 +82,6 @@ public class UserServiceImpl implements UserService {
         return userRepository
                 .findUsersByCategories(categoryRepository.findByName(name),
                         createPageRequest(page, size, sort));
-    }
-
-    private PageRequest createPageRequest(final int page, final int size,
-                                          final String sort) {
-        String[] sortParams = sort.split(",");
-        return sortParams.length > 1 && sortParams[1].equals("desc")
-                ? of(page, size, Sort.by(sortParams[0]).descending())
-                : of(page, size, Sort.by(sortParams[0]));
     }
 
     @Override
