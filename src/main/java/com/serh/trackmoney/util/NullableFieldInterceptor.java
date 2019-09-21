@@ -1,23 +1,23 @@
 package com.serh.trackmoney.util;
 
-import com.serh.trackmoney.dto.ConsumptionDto;
-import com.serh.trackmoney.dto.UserDto;
 import com.serh.trackmoney.exception.api.NullableFieldException;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
 
 import static java.util.Objects.isNull;
 
 public class NullableFieldInterceptor {
-    public static void interceptNullFieldAndThrow(final UserDto userDto) {
-        if (isNull(userDto.getEmail()) || isNull(userDto.getPassword())
-                || isNull(userDto.getRole()) || isNull(userDto.getState())) {
-            throw new NullableFieldException("All fields must be not null");
-        }
-    }
-
-    public static void interceptNullFieldAndThrow(final ConsumptionDto consumptionDto) {
-        if (isNull(consumptionDto.getAmount()) || isNull(consumptionDto.getCategory())
-                || isNull(consumptionDto.getCurrency())) {
-            throw new NullableFieldException("All fields must be not null");
-        }
+    public static void interceptNullFieldAndThrow(final Object object) {
+        Field[] fields = object.getClass().getDeclaredFields();
+        Arrays.stream(fields).forEach(field -> {
+            field.setAccessible(true);
+            try {
+                if (isNull(field.get(object))) {
+                    throw new NullableFieldException("All fields must be not null");
+                }
+            } catch (IllegalAccessException ignore) {
+            }
+        });
     }
 }
