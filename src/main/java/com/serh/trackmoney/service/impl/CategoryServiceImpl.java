@@ -7,7 +7,6 @@ import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.repository.CategoryRepository;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.CategoryService;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category create(final Long userId, final CategoryDto categoryDto) {
-        @NonNull String name = categoryDto.getName();
+        String name = categoryDto.getName();
         categoryDto.setName(name.substring(0, 1).toUpperCase()
                 .concat(name.toLowerCase().substring(1)));
         Category category = categoryRepository.findByName(categoryDto.getName());
