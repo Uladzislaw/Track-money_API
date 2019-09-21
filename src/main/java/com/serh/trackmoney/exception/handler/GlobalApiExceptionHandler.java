@@ -115,21 +115,16 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
             final MethodArgumentNotValidException ex,
             final HttpHeaders headers,
             final HttpStatus status, final WebRequest request) {
-
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", status.value());
-
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(toList());
-
         body.put("errors", errors);
-
         return new ResponseEntity<>(body, headers, status);
-
     }
 
     private ApiErrorResponse createApiException(final HttpStatus status,
