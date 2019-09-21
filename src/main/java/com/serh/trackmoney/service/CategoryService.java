@@ -11,4 +11,6 @@ public interface CategoryService extends CrudService<Category> {
     Category updateByNonNullFields(Long id, CategoryDto categoryDto);
 
     Category update(Long id, CategoryDto categoryDto);
+
+    void delete(Long id);
 }
