@@ -63,12 +63,14 @@ public class CategoryController {
     }
 
     @PutMapping(value = "/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CategoryDto> update(@PathVariable final Long id,
                                               @RequestBody @Valid final CategoryDto categoryDto) {
         return ok(categoryService.update(id, categoryDto).toDto());
     }
 
     @PatchMapping(value = "/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CategoryDto> updateByNonNull(@PathVariable final Long id,
                                                        @RequestBody final CategoryDto categoryDto) {
         return ok(categoryService.updateByNonNullFields(id, categoryDto).toDto());
