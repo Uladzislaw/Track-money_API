@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -53,5 +55,11 @@ public class CategoryController {
         return created(URI.create("/api/v1/users/"
                 + categoryService.create(userId, categoryDto).getId()))
                 .build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<CategoryDto> update(@PathVariable final Long id,
+                                              @RequestBody @Valid final CategoryDto categoryDto) {
+        return ok(categoryService.update(id, categoryDto).toDto());
     }
 }
