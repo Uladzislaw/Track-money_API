@@ -11,5 +11,6 @@ public class TrackMoneyApplication {
 
     public static void main(final String[] args) {
         run(TrackMoneyApplication.class, args);
+
     }
 }
