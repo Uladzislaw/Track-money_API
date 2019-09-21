@@ -83,6 +83,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<Category> findAllForUser(final Long id) {
+        return categoryRepository.findAllByUserId(id);
+    }
+
+    @Override
     public void delete(final Long id) {
         categoryRepository.deleteById(id);
     }

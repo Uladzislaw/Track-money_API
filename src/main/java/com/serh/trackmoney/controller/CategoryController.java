@@ -33,4 +33,9 @@ public class CategoryController {
             @PathVariable final Long userId) {
         return categoryService.findSpecific(userId);
     }
+
+    @GetMapping(value = "/user/{id}")
+    public List<Category> getAllForUser(@PathVariable final Long id) {
+        return categoryService.findAllForUser(id);
+    }
 }

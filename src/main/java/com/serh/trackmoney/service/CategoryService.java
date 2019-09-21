@@ -13,4 +13,6 @@ public interface CategoryService extends CrudService<Category> {
     Category update(Long id, CategoryDto categoryDto);
 
     void delete(Long id);
+
+    List<Category> findAllForUser(Long id);
 }
