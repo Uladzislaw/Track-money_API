@@ -2,6 +2,7 @@ package com.serh.trackmoney.service.impl;
 
 import com.serh.trackmoney.dto.CategoryDto;
 import com.serh.trackmoney.exception.api.CategoryNotFoundException;
+import com.serh.trackmoney.exception.api.IllegalNameException;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
 import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.repository.CategoryRepository;
@@ -39,6 +40,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category create(final Long userId, final CategoryDto categoryDto) {
         String name = categoryDto.getName();
+        if (!name.matches("^[a-zA-Z]+$")) {
+            throw new IllegalNameException("Category name should consist only of letters");
+        }
         categoryDto.setName(name.substring(0, 1).toUpperCase()
                 .concat(name.toLowerCase().substring(1)));
         Category category = categoryRepository.findByName(categoryDto.getName());
