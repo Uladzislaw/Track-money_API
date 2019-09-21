@@ -7,13 +7,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class CategoryDto implements EntityDto, Convertable<Category, CategoryDto> {
 
+    @NotNull
     private String name;
+    @NotNull
     private CategoryType type;
 
     @Override

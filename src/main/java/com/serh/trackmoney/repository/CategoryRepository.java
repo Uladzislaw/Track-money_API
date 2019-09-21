@@ -15,4 +15,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAllDefault(Long id);
 
     List<Category> findByIdGreaterThanAndUsersIs(Long specificStarts, User user);
+
+    @Query(value = "SELECT * FROM categories JOIN categories_users ON category_id = id"
+            + " WHERE u_id = ?1", nativeQuery = true)
+    List<Category> findAllByUserId(Long id);
 }
