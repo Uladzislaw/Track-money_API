@@ -7,16 +7,17 @@ import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.repository.CategoryRepository;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.CategoryService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import static java.util.Objects.nonNull;
+import static java.util.Set.of;
 
 @Service
 @Transactional
@@ -30,11 +31,27 @@ public class CategoryServiceImpl implements CategoryService {
             = () -> new CategoryNotFoundException("Category wasn't found");
 
 
-
     @Override
     @Transactional(readOnly = true)
     public Optional<Category> findOneById(final Long id) {
         return categoryRepository.findById(id);
+    }
+
+    @Override
+    public Category create(final Long userId, final CategoryDto categoryDto) {
+        @NonNull String name = categoryDto.getName();
+        categoryDto.setName(name.substring(0, 1).toUpperCase()
+                .concat(name.toLowerCase().substring(1)));
+        Category category = categoryRepository.findByName(categoryDto.getName());
+        if (nonNull(category)) {
+            category.getUsers().add(userRepository.findById(userId)
+                    .orElseThrow(UserNotFoundException::new));
+            return category;
+        }
+        Category newCategory = categoryDto.toEntity();
+        newCategory.setUsers(of(userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new)));
+        return save(newCategory);
     }
 
     @Override
@@ -58,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category update(final Long id, @Valid final CategoryDto categoryDto) {
+    public Category update(final Long id, final CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(categoryNotFoundException);
         category.setName(categoryDto.getName());

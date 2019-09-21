@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 import javax.persistence.Column;
@@ -18,7 +19,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Set;
 
@@ -31,12 +31,12 @@ import java.util.Set;
 @AllArgsConstructor
 public class Category extends Entity implements Convertable<Category, CategoryDto> {
 
-    @NotBlank
+    @NonNull
     @Column(unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
+    @NonNull
     private CategoryType type;
 
     @ManyToMany
