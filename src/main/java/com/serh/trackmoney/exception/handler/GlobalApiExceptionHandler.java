@@ -4,6 +4,7 @@ import com.serh.trackmoney.exception.ApiErrorResponse;
 import com.serh.trackmoney.exception.api.CategoryNotFoundException;
 import com.serh.trackmoney.exception.api.ConsumptionNotFoundException;
 import com.serh.trackmoney.exception.api.EmailNotValidException;
+import com.serh.trackmoney.exception.api.IllegalNameException;
 import com.serh.trackmoney.exception.api.NullableFieldException;
 import com.serh.trackmoney.exception.api.PageRequestException;
 import com.serh.trackmoney.exception.api.PasswordsDontMatchException;
@@ -97,6 +98,13 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NullableFieldException.class)
     public ResponseEntity<ApiErrorResponse> nullableFields(final Exception ex) {
+        final ApiErrorResponse errorResponse
+                = createApiException(HttpStatus.BAD_REQUEST, ex);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalNameException.class)
+    public ResponseEntity<ApiErrorResponse> illegalName(final Exception ex) {
         final ApiErrorResponse errorResponse
                 = createApiException(HttpStatus.BAD_REQUEST, ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
