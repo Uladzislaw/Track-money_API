@@ -10,10 +10,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -39,13 +41,14 @@ public class Category extends Entity implements Convertable<Category, CategoryDt
     @NonNull
     private CategoryType type;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "categories_users",
             joinColumns = {@JoinColumn(name = "category_id")},
             inverseJoinColumns = {@JoinColumn(name = "u_id")})
     @JsonIgnore
     @ToString.Exclude
+    @BatchSize(size = 10)
     private Set<User> users;
 
     @OneToMany(mappedBy = "category")
