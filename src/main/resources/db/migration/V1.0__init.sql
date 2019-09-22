@@ -13,10 +13,11 @@ CREATE TABLE `users`
 
 CREATE TABLE `categories`
 (
-    `id`      INT         NOT NULL AUTO_INCREMENT,
-    `name`    varchar(50) NOT NULL UNIQUE,
-    `type`    varchar(50) NOT NULL check ( `type` in ('CONSUMPTION', 'INCOME')),
-    `is_ugly` BOOLEAN     NOT NULL DEFAULT '0',
+    `id`          INT         NOT NULL AUTO_INCREMENT,
+    `name`        varchar(50) NOT NULL UNIQUE,
+    `type`        varchar(50) NOT NULL check ( `type` in ('CONSUMPTION', 'INCOME')),
+    `is_ugly`     BOOLEAN     NOT NULL DEFAULT '0',
+    `is_standard` BOOLEAN     NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`)
 );
 

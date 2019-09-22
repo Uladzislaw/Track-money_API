@@ -52,6 +52,9 @@ public class Category extends Entity implements Convertable<Category, CategoryDt
     @JsonIgnore
     private List<Consumption> consumption;
 
+    @Column(name = "is_standard")
+    private Boolean isStandard;
+
     @Override
     public CategoryDto toDto() {
         return CategoryDto.builder()
