@@ -1,5 +1,6 @@
 package com.serh.trackmoney.dto;
 
+import com.serh.trackmoney.annotation.PutNullable;
 import com.serh.trackmoney.model.AccountState;
 import com.serh.trackmoney.model.Role;
 import com.serh.trackmoney.model.User;
@@ -17,6 +18,7 @@ public class UserDto implements Convertable<User, UserDto>, EntityDto {
     private String email;
 
     private String password;
+    @PutNullable
     private String matchingPassword;
 
     private Role role;
