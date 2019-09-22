@@ -13,7 +13,6 @@ import com.serh.trackmoney.util.processor.EmailValidatorProcessor;
 import com.serh.trackmoney.util.processor.RegistrationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,9 +38,6 @@ public class UserServiceImpl implements UserService {
     @Lazy
     private PasswordEncoder encoder;
 
-    @Value("${categories.standard.default}")
-    private Long defaultCategories;
-
     @Override
     @Transactional(readOnly = true)
     public Optional<User> findOneById(final Long id) {
@@ -60,7 +56,7 @@ public class UserServiceImpl implements UserService {
         user.setRole(Role.USER);
         user.setState(AccountState.ACTIVE);
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setCategories(categoryRepository.findAllDefault(defaultCategories));
+        user.setCategories(categoryRepository.findAllDefault());
         return userRepository.save(user);
     }
 
