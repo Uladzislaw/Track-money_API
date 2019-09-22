@@ -10,9 +10,7 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Category findByName(String name);
 
-    @Query(value = "SELECT * FROM categories WHERE is_standard = 1",
-            nativeQuery = true)
-    List<Category> findAllDefault();
+    List<Category> findAllByIsStandard(Boolean isStandard);
 
     List<Category> findByIdGreaterThanAndUsersIs(Long specificStarts, User user);
 

@@ -50,9 +50,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public User getUserById(@PathVariable final Long id) {
+    public UserDto getUserById(@PathVariable final Long id) {
         return userService.findOneById(id)
-                .orElseThrow(userNotFoundException);
+                .orElseThrow(userNotFoundException)
+                .toDto();
     }
 
     @GetMapping(value = "/category/{name}")

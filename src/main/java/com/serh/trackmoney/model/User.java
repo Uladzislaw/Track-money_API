@@ -52,6 +52,7 @@ public class User extends Entity implements Convertable<User, UserDto> {
                 .email(email)
                 .role(role)
                 .state(state)
+                .categories(categories)
                 .build();
     }
 }

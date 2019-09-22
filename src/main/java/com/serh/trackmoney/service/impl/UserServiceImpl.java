@@ -56,7 +56,8 @@ public class UserServiceImpl implements UserService {
         user.setRole(Role.USER);
         user.setState(AccountState.ACTIVE);
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setCategories(categoryRepository.findAllDefault());
+        categoryRepository.findAllByIsStandard(true)
+                .forEach(category -> category.getUsers().add(user));
         return userRepository.save(user);
     }
 
@@ -128,7 +129,6 @@ public class UserServiceImpl implements UserService {
         }
         return update(user);
     }
-
 
     @Override
     public User makeInactive(final Long id) {
