@@ -74,6 +74,9 @@ public class CategoryServiceImpl implements CategoryService {
         if (nonNull(categoryDto.getType())) {
             category.setType(categoryDto.getType());
         }
+        if (categoryDto.getIsStandard()) {
+            category.setIsStandard(true);
+        }
         return update(category);
     }
 
