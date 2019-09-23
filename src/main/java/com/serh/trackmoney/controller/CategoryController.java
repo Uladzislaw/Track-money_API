@@ -24,6 +24,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -38,20 +39,25 @@ public class CategoryController {
             = () -> new CategoryNotFoundException("Category not found.");
 
     @GetMapping(value = "/{id}")
-    public Category getOne(@PathVariable final Long id) {
+    public CategoryDto getOne(@PathVariable final Long id) {
         return categoryService.findOneById(id)
-                .orElseThrow(categoryNotFoundException);
+                .orElseThrow(categoryNotFoundException)
+                .toDto();
     }
 
     @GetMapping(value = "/specific/{userId}")
-    public List<Category> getSpecificCategoriesForUser(
+    public List<CategoryDto> getSpecificCategoriesForUser(
             @PathVariable final Long userId) {
-        return categoryService.findSpecific(userId);
+        return categoryService.findSpecific(userId).stream()
+                .map(Category::toDto)
+                .collect(toList());
     }
 
     @GetMapping(value = "/user/{id}")
-    public List<Category> getAllForUser(@PathVariable final Long id) {
-        return categoryService.findAllForUser(id);
+    public List<CategoryDto> getAllForUser(@PathVariable final Long id) {
+        return categoryService.findAllForUser(id).stream()
+                .map(Category::toDto)
+                .collect(toList());
     }
 
     @PostMapping(value = "/{userId}")
