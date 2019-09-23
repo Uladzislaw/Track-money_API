@@ -6,9 +6,12 @@ import com.serh.trackmoney.exception.api.ConsumptionNotFoundException;
 import com.serh.trackmoney.service.CategoryService;
 import com.serh.trackmoney.service.ConsumptionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -48,5 +51,11 @@ public class ConsumptionController {
     public ConsumptionDto getOne(@PathVariable final Long id) {
         return of(consumptionService.findOneById(id)
                 .orElseThrow(consumptionNotFoundException));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable final Long id) {
+        consumptionService.delete(id);
     }
 }

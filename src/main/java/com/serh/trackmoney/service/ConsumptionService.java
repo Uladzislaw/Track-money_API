@@ -9,4 +9,6 @@ public interface ConsumptionService extends CrudService<Consumption> {
     Consumption updateByNonNullField(ConsumptionDto consumptionDto);
 
     Consumption save(ConsumptionDto consumptionDto, Long userId);
+
+    void delete(Long id);
 }

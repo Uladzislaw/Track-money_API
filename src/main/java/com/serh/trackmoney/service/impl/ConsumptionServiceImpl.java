@@ -90,4 +90,13 @@ public class ConsumptionServiceImpl implements ConsumptionService {
     public List<Consumption> findAll() {
         return consumptionRepository.findAll();
     }
+
+    @Override
+    public void delete(final Long id) {
+        consumptionRepository.findById(id).ifPresent(this::delete);
+    }
+
+    private void delete(final Consumption consumption) {
+        consumptionRepository.deleteById(consumption.getId());
+    }
 }
