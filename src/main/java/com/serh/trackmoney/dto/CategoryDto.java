@@ -1,6 +1,5 @@
 package com.serh.trackmoney.dto;
 
-import com.serh.trackmoney.annotation.PutNullable;
 import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.model.CategoryType;
 import lombok.AllArgsConstructor;
@@ -21,8 +20,7 @@ public class CategoryDto implements EntityDto, Convertable<Category, CategoryDto
     @NotNull
     private CategoryType type;
 
-    @PutNullable
-    private Boolean isStandard;
+    private Boolean isStandard = false;
 
     @Override
     public Category toEntity() {
