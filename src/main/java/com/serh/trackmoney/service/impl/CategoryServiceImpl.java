@@ -86,6 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(categoryNotFoundException);
         category.setName(categoryDto.getName());
         category.setType(categoryDto.getType());
+        category.setIsStandard(categoryDto.getIsStandard());
         return update(category);
     }
 
