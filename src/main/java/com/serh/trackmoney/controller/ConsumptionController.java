@@ -3,7 +3,6 @@ package com.serh.trackmoney.controller;
 import com.serh.trackmoney.dto.ConsumptionDto;
 import com.serh.trackmoney.exception.api.CategoryNotFoundException;
 import com.serh.trackmoney.exception.api.ConsumptionNotFoundException;
-import com.serh.trackmoney.model.Consumption;
 import com.serh.trackmoney.service.CategoryService;
 import com.serh.trackmoney.service.ConsumptionService;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static com.serh.trackmoney.dto.ConsumptionDto.of;
+import static java.util.stream.Collectors.toList;
+
 @RestController
 @RequestMapping("/api/v1/consumptions")
 @RequiredArgsConstructor
 public class ConsumptionController {
 
     private final ConsumptionService consumptionService;
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     private Supplier<ConsumptionNotFoundException> consumptionNotFoundException
             = () -> new ConsumptionNotFoundException("Consumption not found.");
@@ -34,15 +36,17 @@ public class ConsumptionController {
     }
 
     @GetMapping(value = "/category/{categoryId}")
-    public List<Consumption> getByCategory(@PathVariable final Long categoryId) {
+    public List<ConsumptionDto> getByCategory(@PathVariable final Long categoryId) {
         return categoryService.findOneById(categoryId)
                 .orElseThrow(categoryNotFoundException)
-                .getConsumption();
+                .getConsumption().stream()
+                .map(ConsumptionDto::of)
+                .collect(toList());
     }
 
     @GetMapping(value = "/{id}")
-    public Consumption getOne(@PathVariable final Long id) {
-        return consumptionService.findOneById(id)
-                .orElseThrow(consumptionNotFoundException);
+    public ConsumptionDto getOne(@PathVariable final Long id) {
+        return of(consumptionService.findOneById(id)
+                .orElseThrow(consumptionNotFoundException));
     }
 }

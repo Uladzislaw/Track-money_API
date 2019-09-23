@@ -35,7 +35,6 @@ public class Consumption extends Entity {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonIgnore
     @ToString.Exclude
     private Category category;
 
