@@ -9,6 +9,7 @@ import com.serh.trackmoney.repository.CurrencyRepository;
 import com.serh.trackmoney.repository.UserRepository;
 import com.serh.trackmoney.service.ConsumptionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
+import static com.serh.trackmoney.util.PageRequestCreator.createPageRequest;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -89,6 +91,13 @@ public class ConsumptionServiceImpl implements ConsumptionService {
     @Transactional(readOnly = true)
     public List<Consumption> findAll() {
         return consumptionRepository.findAll();
+    }
+
+    @Override
+    public Page<Consumption> findAll(final Integer page,
+                                     final Integer size,
+                                     final String sort) {
+        return consumptionRepository.findAll(createPageRequest(page, size, sort));
     }
 
     @Override

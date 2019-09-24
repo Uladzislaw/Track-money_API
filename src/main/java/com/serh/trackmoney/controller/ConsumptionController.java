@@ -6,11 +6,14 @@ import com.serh.trackmoney.exception.api.ConsumptionNotFoundException;
 import com.serh.trackmoney.service.CategoryService;
 import com.serh.trackmoney.service.ConsumptionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,9 +36,16 @@ public class ConsumptionController {
     private Supplier<CategoryNotFoundException> categoryNotFoundException
             = () -> new CategoryNotFoundException("Category not found.");
 
+    private static final String DEFAULT_PAGE_SIZE = "10";
+
     @GetMapping
-    public List<ConsumptionDto> all() {
-        return null;
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page<ConsumptionDto> all(@RequestParam(value = "page", defaultValue = "1") final int page,
+                                    @RequestParam(value = "size",
+                                            defaultValue = DEFAULT_PAGE_SIZE) final int size,
+                                    @RequestParam(value = "sort",
+                                            defaultValue = "id,asc") final String sort) {
+        return consumptionService.findAll(page, size, sort).map(ConsumptionDto::of);
     }
 
     @GetMapping(value = "/category/{categoryId}")
