@@ -25,12 +25,8 @@ public class ConsumptionDto
 
     @Override
     public Consumption toEntity() {
-        return Consumption.builder()
-                .amount(amount)
-                .additionDate(LocalDate.now())
-                .category(category.toEntity())
-                .currency(currency.toEntity())
-                .build();
+        throw new UnsupportedOperationException(
+                "Consumption cannot be full converted to entity");
     }
 
     public static ConsumptionDto of(final Consumption consumption) {

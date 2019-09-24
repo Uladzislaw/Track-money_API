@@ -12,7 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ public class Consumption extends Entity {
     @Positive
     private BigDecimal amount;
 
-    @NotBlank
+    @NotNull
     @Column(name = "addition_date")
     private LocalDate additionDate;
 

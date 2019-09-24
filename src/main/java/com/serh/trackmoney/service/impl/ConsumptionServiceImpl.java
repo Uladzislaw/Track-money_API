@@ -1,8 +1,11 @@
 package com.serh.trackmoney.service.impl;
 
 import com.serh.trackmoney.dto.ConsumptionDto;
+import com.serh.trackmoney.exception.api.CategoryNotFoundException;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
+import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.model.Consumption;
+import com.serh.trackmoney.model.User;
 import com.serh.trackmoney.repository.CategoryRepository;
 import com.serh.trackmoney.repository.ConsumptionRepository;
 import com.serh.trackmoney.repository.CurrencyRepository;
@@ -14,11 +17,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.serh.trackmoney.model.Consumption.builder;
 import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
 import static com.serh.trackmoney.util.PageRequestCreator.createPageRequest;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -81,10 +87,21 @@ public class ConsumptionServiceImpl implements ConsumptionService {
     @Override
     public Consumption save(final ConsumptionDto consumptionDto,
                             final Long userId) {
-        Consumption consumption = consumptionDto.toEntity();
-        consumption.setUser(userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new));
-        return consumption;
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        Category category
+                = categoryRepository.findByName(consumptionDto.getCategory().getName());
+        if (isNull(category)) {
+            throw new CategoryNotFoundException("Category with this name does not exist");
+        }
+        Consumption consumption = builder()
+                .currency(currencyRepository.findByName(consumptionDto.getCurrency().getName()))
+                .user(user)
+                .category(category)
+                .additionDate(LocalDate.now())
+                .amount(consumptionDto.getAmount())
+                .build();
+        return save(consumption);
     }
 
     @Override
