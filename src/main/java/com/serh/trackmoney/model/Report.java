@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Report {
 
-    private BigDecimal income;
+    private BigDecimal totalIncome;
     private BigDecimal totalExpenses;
     private Map<Category, BigDecimal> expenseOnCategory;
     private Period period;
