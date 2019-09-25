@@ -38,14 +38,6 @@ CREATE TABLE `categories_users`
     `category_id` INT
 );
 
-CREATE TABLE `period`
-(
-    `id`        INT  NOT NULL AUTO_INCREMENT,
-    `beginning` DATE NOT NULL,
-    `end`       DATE NOT NULL,
-    PRIMARY KEY (`id`)
-);
-
 CREATE TABLE `currency`
 (
     `id`   INT         NOT NULL AUTO_INCREMENT,

@@ -3,7 +3,7 @@ use trackmoneydb;
 insert into users (email, password, state, role)
 values ('a@gm.com',
         '$2a$10$Ny8Cg433DT3/4ORVEADbReKnG.ILm/0bNoMFwLbMp0aSPcQ1EcVrC',
-        'ACTIVE', 'USER'),
+        'ACTIVE', 'ADMIN'),
        ('aa@gmc.com',
         '$2a$10$7kKlVZVmQ6u6SRX0blDCEe/CtiJuW/2kktZ9OYCguMlzMpgPSea/e',
         'ACTIVE', 'USER'),
