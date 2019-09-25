@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 public interface ConsumptionService extends CrudService<Consumption> {
     Consumption update(Long id, ConsumptionDto consumptionDto);
 
-    Consumption updateByNonNullField(ConsumptionDto consumptionDto);
+    Consumption updateByNonNullField(Long id, ConsumptionDto consumptionDto);
 
     Consumption save(ConsumptionDto consumptionDto, Long userId);
 

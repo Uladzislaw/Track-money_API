@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static com.serh.trackmoney.model.Consumption.builder;
 import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
@@ -38,6 +39,9 @@ public class ConsumptionServiceImpl implements ConsumptionService {
     private final CategoryRepository categoryRepository;
     private final CurrencyRepository currencyRepository;
 
+    private final Supplier<ConsumptionNotFoundException> consumptionNotFoundException = () ->
+            new ConsumptionNotFoundException("Consumption with this id not found");
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Consumption> findOneById(final Long id) {
@@ -54,8 +58,7 @@ public class ConsumptionServiceImpl implements ConsumptionService {
         interceptNullFieldAndThrow(consumptionDto);
         Consumption userConsumption = consumptionRepository
                 .findById(id)
-                .orElseThrow(() ->
-                        new ConsumptionNotFoundException("Consumption with this id not found"));
+                .orElseThrow(consumptionNotFoundException);
         userConsumption.setAmount(consumptionDto.getAmount());
         userConsumption.setCategory(categoryRepository
                 .findByName(consumptionDto.getCategory().getName()));
@@ -65,9 +68,10 @@ public class ConsumptionServiceImpl implements ConsumptionService {
     }
 
     @Override
-    public Consumption updateByNonNullField(final ConsumptionDto consumptionDto) {
+    public Consumption updateByNonNullField(final Long id,
+                                            final ConsumptionDto consumptionDto) {
         Consumption userConsumption = consumptionRepository
-                .findByAdditionDate(consumptionDto.getAdditionDate());
+                .findById(id).orElseThrow(consumptionNotFoundException);
         if (nonNull(consumptionDto.getAmount())) {
             userConsumption.setAmount(consumptionDto.getAmount());
         }
