@@ -2,6 +2,7 @@ package com.serh.trackmoney.service.impl;
 
 import com.serh.trackmoney.dto.ConsumptionDto;
 import com.serh.trackmoney.exception.api.CategoryNotFoundException;
+import com.serh.trackmoney.exception.api.ConsumptionNotFoundException;
 import com.serh.trackmoney.exception.api.UserNotFoundException;
 import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.model.Consumption;
@@ -49,10 +50,12 @@ public class ConsumptionServiceImpl implements ConsumptionService {
     }
 
     @Override
-    public Consumption update(final ConsumptionDto consumptionDto) {
+    public Consumption update(final Long id, final ConsumptionDto consumptionDto) {
         interceptNullFieldAndThrow(consumptionDto);
         Consumption userConsumption = consumptionRepository
-                .findByAdditionDate(consumptionDto.getAdditionDate());
+                .findById(id)
+                .orElseThrow(() ->
+                        new ConsumptionNotFoundException("Consumption with this id not found"));
         userConsumption.setAmount(consumptionDto.getAmount());
         userConsumption.setCategory(categoryRepository
                 .findByName(consumptionDto.getCategory().getName()));

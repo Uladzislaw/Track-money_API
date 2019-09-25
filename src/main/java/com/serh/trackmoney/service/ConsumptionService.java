@@ -5,7 +5,7 @@ import com.serh.trackmoney.model.Consumption;
 import org.springframework.data.domain.Page;
 
 public interface ConsumptionService extends CrudService<Consumption> {
-    Consumption update(ConsumptionDto consumptionDto);
+    Consumption update(Long id, ConsumptionDto consumptionDto);
 
     Consumption updateByNonNullField(ConsumptionDto consumptionDto);
 
