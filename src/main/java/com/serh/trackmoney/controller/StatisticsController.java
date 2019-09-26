@@ -28,4 +28,12 @@ public class StatisticsController {
         return creator.createDefaultReport(wrapper.getPeriod(), userService.findOneById(userId)
                 .orElseThrow(UserNotFoundException::new), wrapper.getCurrency());
     }
+
+    @GetMapping(value = "/{userId}/{category-name}")
+    public Report getStatisticsForUserCategory(@PathVariable final Long userId,
+                                               @PathVariable("category-name") final String categoryName,
+                                               @RequestBody final ReportRequestWrapper wrapper) {
+        return creator.createReportForCategory(wrapper.getPeriod(), userService.findOneById(userId)
+                .orElseThrow(UserNotFoundException::new), wrapper.getCurrency(), categoryName);
+    }
 }

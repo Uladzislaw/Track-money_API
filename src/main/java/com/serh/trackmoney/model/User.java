@@ -8,10 +8,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -42,7 +44,8 @@ public class User extends Entity implements Convertable<User, UserDto> {
     @Enumerated(EnumType.STRING)
     private AccountState state;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @BatchSize(size = 20)
     private List<Category> categories;
 
 
