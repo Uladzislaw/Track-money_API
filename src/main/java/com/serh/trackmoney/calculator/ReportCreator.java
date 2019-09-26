@@ -2,6 +2,7 @@ package com.serh.trackmoney.calculator;
 
 import com.serh.trackmoney.model.Category;
 import com.serh.trackmoney.model.Consumption;
+import com.serh.trackmoney.model.Currency;
 import com.serh.trackmoney.model.Period;
 import com.serh.trackmoney.model.Report;
 import com.serh.trackmoney.model.User;
@@ -16,23 +17,24 @@ import java.util.Map;
 
 import static com.serh.trackmoney.model.CategoryType.CONSUMPTION;
 import static com.serh.trackmoney.model.CategoryType.INCOME;
-import static com.serh.trackmoney.model.Report.builder;
 
 @RequiredArgsConstructor
 @Component
-public class ReportCreatorCalculator {
+public class ReportCreator {
 
     private final ConsumptionRepository consumptionRepository;
     private final StatisticsCalculator calculator;
 
-    public Report createDefaultReport(final Period period, final User user) {
+    public Report createDefaultReport(final Period period, final User user,
+                                      final Currency currency) {
         List<Consumption> consumptions
-                = consumptionRepository.findByAdditionDateBetween(
-                period.getBeginning(), period.getEnd());
+                = consumptionRepository.findByAdditionDateBetweenAndCurrency_Name(
+                period.getBeginning(), period.getEnd(), currency.getName());
         Map<Category, BigDecimal> expensesByCategory = new HashMap<>();
         user.getCategories().forEach(
                 c -> expensesByCategory.put(c, calculator.calcForCategory(c, consumptions)));
-        return builder()
+        expensesByCategory.forEach((key, value) -> key.getConsumption().clear());
+        return Report.builder()
                 .expenseOnCategory(expensesByCategory)
                 .period(period)
                 .totalExpenses(calculator.calcTotalByType(consumptions, CONSUMPTION))

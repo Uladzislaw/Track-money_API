@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.serh.trackmoney.model.Consumption.builder;
 import static com.serh.trackmoney.util.NullableFieldInterceptor.interceptNullFieldAndThrow;
 import static com.serh.trackmoney.util.PageRequestCreator.createPageRequest;
 import static java.util.Objects.isNull;
@@ -101,7 +100,7 @@ public class ConsumptionServiceImpl implements ConsumptionService {
         if (isNull(category)) {
             throw new CategoryNotFoundException("Category with this name does not exist");
         }
-        Consumption consumption = builder()
+        Consumption consumption = Consumption.builder()
                 .currency(currencyRepository.findByName(consumptionDto.getCurrency().getName()))
                 .user(user)
                 .category(category)

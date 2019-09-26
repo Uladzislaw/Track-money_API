@@ -51,8 +51,9 @@ public class Category extends Entity implements Convertable<Category, CategoryDt
     @BatchSize(size = 10)
     private Set<User> users;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @JsonIgnore
+    @BatchSize(size = 20)
     private List<Consumption> consumption;
 
     @Column(name = "is_standard")
